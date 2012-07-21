@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<title>SAP OData/SAPUI5 demo</title>
+
+<script id="sap-ui-bootstrap" type="text/javascript" src="http://nl4b-erp.nl4b.com:8000/sapui5/sapui5-static/resources/sap-ui-core.js"
+data-sap-ui-theme="sap_goldreflection" data-sap-ui-libs="sap.ui.commons,sap.ui.table,sap.ui.ux3">
+</script>
+
+<!-- data-sap-ui-loglevel=NONE -->
+<script type="text/javascript" src="./Models/flightInfoModel.js"></script>
+<script type="text/javascript" src="./Controllers/flightController.js"></script>
+<script type="text/javascript" src="./Views/ui_utilities.js"></script>
+<script type="text/javascript" src="./Views/showFlights.js"></script>
+<script type="text/javascript" src="./Views/showAirports.js"></script>
+<script type="text/javascript" src="./Views/showBookings.js"></script>
+<script type="text/javascript" src="./Views/treeView.js"></script>
+
+<script type="text/javascript">
+	
+	//var flightsView = sap.ui.jsview("sap.training.gw100.view.showFlights");
+	//var airportsView = sap.ui.jsview("sap.training.gw100.view.showAirports");
+	//var bookingsView = sap.ui.jsview("sap.training.gw100.view.showBookings");
+	var treeView = sap.ui.jsview("sap.training.gw100.view.treeView");
+	
+	var oShell = new sap.ui.ux3.Shell("myShell", 
+	{
+		//appIcon:"http://www.sap.com/global/images/SAPLogo.gif",
+		//appTitle:"SAPUI5 Interface to Gateway",
+		showSearchTool: true,
+        showInspectorTool: false,
+        showFeederTool: false,
+		worksetItems:[
+			new sap.ui.ux3.NavigationItem(
+				{
+					key:"wi_FlightInfo", 
+					text:"Flight Information", 
+					subItems: [	/*new sap.ui.ux3.NavigationItem({key:"wi_FlightInfo_Flights", text:"Flights"}),
+						 		new sap.ui.ux3.NavigationItem({key:"wi_FlightInfo_Airport", text:"Airports"}),
+						 		new sap.ui.ux3.NavigationItem({key:"wi_FlightInfo_Bookings", text:"Bookings"}),*/
+						 		new sap.ui.ux3.NavigationItem({key:"wi_TreeView", text:"Browse Flights"}),
+						 		new sap.ui.ux3.NavigationItem({key:"wi_CancellationView", text:"Airports"}) 
+						 	  ] 
+				} )
+		]
+	});
+	
+	var mContent = {};
+	
+	var getContent = function(key)
+	{
+		if(mContent[key])
+		{
+			return mContent[key];
+		}
+		
+		if( key === "wi_FlightInfo_Bookings" )
+		{ 
+			mContent[key] = bookingsView; 
+		}
+		else if( key === "wi_FlightInfo_Airport" )
+		{ 
+			mContent[key] = airportsView; 
+		}
+		else if( key === "wi_FlightInfo_Flights" )
+		{ 
+			mContent[key] = flightsView; 
+		}
+		else if( key === "wi_TreeView" )
+		{ 
+			mContent[key] = treeView;
+		}
+		
+		
+		return mContent[key];
+	}
+	
+	oShell.attachWorksetItemSelected(function(oEvent)
+	{
+		var key = oEvent.getParameter("key");
+		oShell.setContent(getContent(key));
+	});
+
+	oShell.setContent(getContent("wi_TreeView"));
+	oShell.placeAt("shellArea");
+
+</script>
+</head>
+<body class="sapUiBody">
+<div id="shellArea">
+</div>
+</body>
+</html>
