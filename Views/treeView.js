@@ -56,7 +56,7 @@ sap.ui.jsview("sap.training.gw100.view.treeView",
 				for(var i=0; i<airports.length; i++)
                 {
                     airport = airports[i].IATACode;
-                    airport = "Airports('" + airport + "')/DepartingFlights/'";
+                    airport = "Airports('" + airport + "')/DepartingFlights/";
                     flights = oController.readEntitySet(airport, false);
                     length = flights.length;
                     
