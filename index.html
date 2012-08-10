@@ -4,7 +4,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <title>SAP OData/SAPUI5 demo</title>
 
-<script id="sap-ui-bootstrap" type="text/javascript" src="http://nl4b-erp.nl4b.com:8000/sapui5/sapui5-static/resources/sap-ui-core.js"
+<script id="sap-ui-bootstrap" type="text/javascript" src="/sapui5/resources/sap-ui-core.js"
 data-sap-ui-theme="sap_goldreflection" data-sap-ui-libs="sap.ui.commons,sap.ui.table,sap.ui.ux3">
 </script>
 
@@ -17,6 +17,21 @@ data-sap-ui-theme="sap_goldreflection" data-sap-ui-libs="sap.ui.commons,sap.ui.t
 <script type="text/javascript" src="./Views/showBookings.js"></script>
 <script type="text/javascript" src="./Views/treeView.js"></script>
 
+<script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBF9-OoliGES_gayE71nE8KacERqCHmOKg&sensor=false">
+    </script>
+    <script type="text/javascript">
+      function initialize() {
+        var mapOptions = {
+          center: new google.maps.LatLng(-34.397, 150.644),
+          zoom: 8,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map_canvas"),
+            mapOptions);
+      }
+    </script>
+	
 <script type="text/javascript">
 	
 	//var flightsView = sap.ui.jsview("sap.training.gw100.view.showFlights");
@@ -83,12 +98,16 @@ data-sap-ui-theme="sap_goldreflection" data-sap-ui-libs="sap.ui.commons,sap.ui.t
 	});
 
 	oShell.setContent(getContent("wi_TreeView"));
-	oShell.placeAt("shellArea");
+	//oShell.placeAt("shellArea");
 
 </script>
 </head>
-<body class="sapUiBody">
+<body class="sapUiBody" onload="initialize()">
 <div id="shellArea">
+
+
 </div>
+<div id="map_canvas" style="width:100%; height:100%"></div>
+
 </body>
 </html>
