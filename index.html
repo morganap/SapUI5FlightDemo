@@ -3,13 +3,18 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <title>SAP OData/SAPUI5 demo</title>
-
+<style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map_canvas { height: 100% }
+    </style>
 <script id="sap-ui-bootstrap" type="text/javascript" src="/sapui5/resources/sap-ui-core.js"
 data-sap-ui-theme="sap_goldreflection" data-sap-ui-libs="sap.ui.commons,sap.ui.table,sap.ui.ux3">
 </script>
 
 <!-- data-sap-ui-loglevel=NONE -->
 <script type="text/javascript" src="./Models/flightInfoModel.js"></script>
+<script type="text/javascript" src="./Models/companyModel.js"></script>
 <script type="text/javascript" src="./Controllers/flightController.js"></script>
 <script type="text/javascript" src="./Views/ui_utilities.js"></script>
 <script type="text/javascript" src="./Views/showFlights.js"></script>
@@ -21,14 +26,80 @@ data-sap-ui-theme="sap_goldreflection" data-sap-ui-libs="sap.ui.commons,sap.ui.t
       src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBF9-OoliGES_gayE71nE8KacERqCHmOKg&sensor=false">
     </script>
     <script type="text/javascript">
+    	var map;
+    	var allMarkers = [];
       function initialize() {
+      	
         var mapOptions = {
-          center: new google.maps.LatLng(-34.397, 150.644),
+          center: new google.maps.LatLng(41.800278, 12.2388),
           zoom: 8,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-        var map = new google.maps.Map(document.getElementById("map_canvas"),
-            mapOptions);
+        
+       		map = new google.maps.Map(document.getElementById("map_canvas"),
+            												mapOptions);
+            
+            var marker = new google.maps.Marker({
+      							position: new google.maps.LatLng(41.800278, 12.2388),
+      							map: map,
+      							title:"Hello World!" });
+      		
+      		
+      		allMarkers.push(marker);
+  	  }
+  	  
+      function setAirport(airport)
+      {
+         
+         google.maps.event.addListener(map, 'center_changed', function() {
+
+  				
+  				
+  				});
+
+         for(var i = 0; i < allMarkers.length; i++) {
+    		var marker = allMarkers[i];
+    		marker.setMap(null);
+		 }
+		 
+		 allMarkers = [];
+
+         var latLng;
+         switch(airport)
+         {
+         	case "FCO":
+         	 var latLgn = new google.maps.LatLng(41.800278, 12.2388);
+         	 break;
+         	case "NRT":
+         	 var latLgn = new google.maps.LatLng(35.773212, 140.38744);
+         	 break;
+         	case "TYO":
+         	 var latLgn = new google.maps.LatLng(35.6895265930799,139.691677093506);
+         	 break;
+         	case "JFK":
+         	 var latLgn = new google.maps.LatLng(40.638611,-73.776);
+         	 break;
+         	case "FRA":
+         	 var latLgn = new google.maps.LatLng(50.038889,8.57055);
+         	 break;
+         	case "SIN":
+         	 var latLgn = new google.maps.LatLng(1.350278,103.994);
+         	 break;
+            case "SFO":
+         	 var latLgn = new google.maps.LatLng(37.618972,-122.37);
+         	 break;
+         }
+         
+      	 map.setCenter(latLgn);
+      	 
+      	 var marker = new google.maps.Marker({
+      		position: latLgn,
+      		map: map,
+      		animation: google.maps.Animation.DROP,
+      		title:"Hello World!" });
+      	
+      	allMarkers.push(marker);
+                        	
       }
     </script>
 	
@@ -43,6 +114,7 @@ data-sap-ui-theme="sap_goldreflection" data-sap-ui-libs="sap.ui.commons,sap.ui.t
 	{
 		//appIcon:"http://www.sap.com/global/images/SAPLogo.gif",
 		//appTitle:"SAPUI5 Interface to Gateway",
+		width: '50%',
 		showSearchTool: true,
         showInspectorTool: false,
         showFeederTool: false,
@@ -55,7 +127,7 @@ data-sap-ui-theme="sap_goldreflection" data-sap-ui-libs="sap.ui.commons,sap.ui.t
 						 		new sap.ui.ux3.NavigationItem({key:"wi_FlightInfo_Airport", text:"Airports"}),
 						 		new sap.ui.ux3.NavigationItem({key:"wi_FlightInfo_Bookings", text:"Bookings"}),*/
 						 		new sap.ui.ux3.NavigationItem({key:"wi_TreeView", text:"Browse Flights"}),
-						 		new sap.ui.ux3.NavigationItem({key:"wi_CancellationView", text:"Airports"}) 
+						 		new sap.ui.ux3.NavigationItem({key:"wi_MapView", text:"Airports"}) 
 						 	  ] 
 				} )
 		]
@@ -88,6 +160,10 @@ data-sap-ui-theme="sap_goldreflection" data-sap-ui-libs="sap.ui.commons,sap.ui.t
 			
 			//Hasjdflkjas
 		}
+		else if( key === "wi_MapView")
+		{
+			mContent[key] = mapView;
+		}
 		
 		
 		return mContent[key];
@@ -105,11 +181,10 @@ data-sap-ui-theme="sap_goldreflection" data-sap-ui-libs="sap.ui.commons,sap.ui.t
 </script>
 </head>
 <body class="sapUiBody" onload="initialize()">
-<div id="shellArea">
+<div id="shellArea" style="width:50%;">
 
-
+	
 </div>
-<div id="map_canvas" style="width:100%; height:100%"></div>
 
 </body>
 </html>
